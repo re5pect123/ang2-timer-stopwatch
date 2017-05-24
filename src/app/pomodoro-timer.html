@@ -1,7 +1,32 @@
-<div class="row">
-    <div class="col-sm-4 col-sm-offset-4  text-center">4
+<nav class="navbar navbar-default navbar-static-top" style="margin-bottom:420px;">
+    <div class="container">
+        <div class="navbar-header">
+            <strong class="navbar-brand"> POMODORO TASKS </strong>
 
-        <h1> {{minutes}} : {{seconds | number: '2.0'}}</h1>
-        <p><button type="button" class="btn btn-primary" (click)="togglePause()"> {{buttonLabel}} </button></p>
+        </div>
     </div>
-</div>
+
+
+</nav>
+
+
+
+
+
+<p> POCETNI DEO KNJIGE</p>
+<countdown [seconds]="10" (complete)="onCountdownCompleted()" #counter></countdown>
+<p>
+    <button class="btn btn-default" (click)="counter.seconds = 10">
+                Reset!
+              </button>
+</p>
+<p *ngIf="counter.seconds == 8"> TIME IS ON </p>
+
+<p *ngIf="counter.seconds < 5">
+    Jos {{counter.seconds}} !
+</p>
+
+<p> {{ price | currency:"EUR":true}} </p>
+<p> {{ today | date:'medium'}}</p>
+
+<button (click)="togglePause()"> {{ languageCode | i18nSelect:localizedLabelsMap}}</button>

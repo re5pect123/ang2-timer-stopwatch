@@ -1,47 +1,27 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
+import { Input, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
-    selector: 'pomodoro-timer',
-    templateUrl: './pomodoro-timer.html'
-    
+    selector: 'countdown',
+    template: '<h1> Time left: {{seconds}}</h1>'
 })
-
-export class PomodoroTimerComponent {
-
-    minutes: number;
-    seconds: number;
-    isPaused: boolean;
-    buttonLabel: string;
+export class CountdownComponent {
+    
+    @Input() seconds: number; // kada koristimo input mozemo u htmlu postaviti [seconds]
+    intervalId: any;
+    @Output() complete: EventEmitter<any> = new EventEmitter(); // mozemo postaviti event
+    @Output() progress: EventEmitter <number> = new EventEmitter();
 
     constructor() {
-        this.resetPomodoro();
-        setInterval(() => this.tick(), 1000);
-    }
-    togglePause() {
-        this.isPaused = !this.isPaused;
-        if (this.minutes < 24 || this.seconds < 29) {
-            this.buttonLabel = this.isPaused ? 'Resume' : 'Pause'
-        }
+        this.intervalId = setInterval(() => this.tick(), 1000);
     }
 
-    resetPomodoro(): void {
-        this.minutes = 24;
-        this.seconds = 59;
-        this.buttonLabel = 'Start';
-        this.togglePause();
-    }
     tick(): void {
-        if (this.isPaused) {
-            this.buttonLabel = 'Pause';
-
-            if (--this.seconds < 0) {
-                this.seconds = 59;
-
-                if (--this.minutes < 0) {
-                    this.minutes = 24;
-                    this.seconds = 59;
-                }
-            }
+        if (--this.seconds < 1) {
+            clearInterval(this.intervalId);
+            this.complete.emit(null);
         }
+        this.progress.emit(this.seconds);
     }
 }
